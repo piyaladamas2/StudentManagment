@@ -21,6 +21,7 @@ public class StudentServiceImpl implements StudentService {
     Student student = Student.builder()
         .name(stuDto.getName())
         .email(stuDto.getEmail())
+        .phoneNumber(stuDto.getPhoneNumber())
         .department(stuDto.getDepartment())
         .build();
     Student savedStudent = studentRepository.save(student);
@@ -50,6 +51,7 @@ public class StudentServiceImpl implements StudentService {
     student.setName(dto.getName());
     student.setEmail(dto.getEmail());
     student.setDepartment(dto.getDepartment());
+    student.setDepartment(dto.getPhoneNumber());
     return mapToResponse(studentRepository.save(student));
   }
 
@@ -66,6 +68,7 @@ public class StudentServiceImpl implements StudentService {
         .id(student.getId())
         .name(student.getName())
         .email(student.getEmail())
+        .phoneNumber(student.getPhoneNumber())
         .department(student.getDepartment())
         .build();
   }

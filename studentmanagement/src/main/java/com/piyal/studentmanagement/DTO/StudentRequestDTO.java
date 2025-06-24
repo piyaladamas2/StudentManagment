@@ -18,7 +18,9 @@ public class StudentRequestDTO {
   @Email(message = "Email is invalid")
   @NotBlank(message = "Email is required")
   private String email;
-
+  // valivation for phoneNumber
+  @NotBlank(message = "Phone Number is required")
+  private String phoneNumber;
   // validation for department
   @NotBlank(message = "Department is required")
   private String department;
