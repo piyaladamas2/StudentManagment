@@ -11,43 +11,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.piyal.studentmanagement.DTO.StudentRequestDTO;
 import com.piyal.studentmanagement.DTO.StudentResponseDTO;
-import com.piyal.studentmanagement.Services.StudentServiceImpl;
-
-import jakarta.validation.Valid;
+import com.piyal.studentmanagement.Services.StudentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
   @Autowired
-  StudentServiceImpl studentservice;
+  StudentService studentService;
 
-  @PostMapping("/register")
-  public StudentResponseDTO register(@Valid @RequestBody StudentRequestDTO dto) {
-    return studentservice.createStudent(dto);
+  @PostMapping
+  public ResponseEntity<StudentResponseDTO> createStudent(@RequestBody StudentRequestDTO dto) {
+    return ResponseEntity.ok(studentService.createStudent(dto));
   }
 
   @GetMapping("/all")
-  public List<StudentResponseDTO> getAll() {
-    return studentservice.getAllStudents();
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
+    return ResponseEntity.ok(studentService.getAllStudents());
   }
 
   @GetMapping("/{id}")
-  public StudentResponseDTO getById(@PathVariable Long id) {
-    return studentservice.getStudentById(id);
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<StudentResponseDTO> getStudent(@PathVariable Long id) {
+    return ResponseEntity.ok(studentService.getStudentById(id));
   }
 
   @PutMapping("/{id}")
-  public StudentResponseDTO update(@PathVariable Long id, @Valid @RequestBody StudentRequestDTO dto) {
-    return studentservice.updateStudent(id, dto);
+  @PreAuthorize("hasAnyRole('ADMIN','USER')")
+  public ResponseEntity<StudentResponseDTO> updateStudent(
+      @PathVariable Long id,
+      @RequestBody StudentRequestDTO dto) {
+    return ResponseEntity.ok(studentService.updateStudent(id, dto));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> delete(@PathVariable Long id) {
-    studentservice.deleteStudent(id);
-    return ResponseEntity.ok("Student deleted successfully.");
+  @PreAuthorize("hasAnyRole('ADMIN','USER')")
+  public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+    studentService.deleteStudent(id);
+    return ResponseEntity.ok("Student deleted successfully");
   }
 }
