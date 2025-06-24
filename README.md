@@ -69,7 +69,7 @@ This is a secure and scalable **Student Management System** REST API built using
 | ---------------- | ------ | ----------- | ------------------------------- |
 | `/auth/register` | POST   | Public      | Register as a `USER` or `ADMIN` |
 | `/auth/login`    | POST   | Public      | Login to get JWT                |
-| `/students`      | POST   | Public\*    | Create student                  |
+| `/students`      | POST   | USER, ADMIN | Create student                  |
 | `/students/all`  | GET    | ADMIN       | Get all students                |
 | `/students/{id}` | GET    | ADMIN       | Get a specific student by ID    |
 | `/students/{id}` | PUT    | USER, ADMIN | Update student                  |
@@ -80,3 +80,14 @@ This is a secure and scalable **Student Management System** REST API built using
 ---
 
 ## 📁 Project Structure
+
+src/main/java/com/piyal/studentmanagement
+│
+├── controller/ # REST Controllers (StudentController, AuthController)
+├── dto/ # DTO classes (StudentRequestDTO, AuthRequestDTO, etc.)
+├── model/ # Entity classes (User, Student, Role)
+├── repository/ # Spring Data JPA interfaces
+├── security/ # JWT utilities, filters, and config
+├── service/ # Interfaces & Implementations
+├── exception/ # Custom exceptions & Global handler
+└── StudentManagementApplication.java

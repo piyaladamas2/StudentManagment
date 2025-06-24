@@ -25,6 +25,7 @@ public class StudentController {
   StudentService studentService;
 
   @PostMapping
+  @PreAuthorize("hasAnyRole('USER','ADMIN')")
   public ResponseEntity<StudentResponseDTO> createStudent(@RequestBody StudentRequestDTO dto) {
     return ResponseEntity.ok(studentService.createStudent(dto));
   }

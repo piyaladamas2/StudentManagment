@@ -1,5 +1,6 @@
 package com.piyal.studentmanagement.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piyal.studentmanagement.DTO.AuthRequestDTO;
+import com.piyal.studentmanagement.DTO.RegisterRequestDTO;
+import com.piyal.studentmanagement.Model.Role;
 import com.piyal.studentmanagement.Model.User;
 import com.piyal.studentmanagement.Repository.UserRepository;
 import com.piyal.studentmanagement.SecurityConfig.JwtUtil;
@@ -21,19 +24,31 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+  @Autowired
   UserRepository userRepo;
+
+  @Autowired
   PasswordEncoder passwordEncoder;
+
+  @Autowired
   AuthenticationManager authManager;
+
+  @Autowired
   JwtUtil jwtUtil;
 
   @PostMapping("/register")
-  public ResponseEntity<String> register(@RequestBody User user) {
-    if (userRepo.findByUsername(user.getUsername()).isPresent()) {
+  public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request) {
+    if (userRepo.findByUsername(request.getUsername()).isPresent()) {
       return ResponseEntity.badRequest().body("Username already exists");
     }
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    User user = new User();
+    user.setUsername(request.getUsername());
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+    user.setRole(request.getRole() != null ? request.getRole() : Role.USER);
+
     userRepo.save(user);
-    return ResponseEntity.ok("User registered");
+    return ResponseEntity.ok("User registered as " + user.getRole());
   }
 
   @PostMapping("/login")
