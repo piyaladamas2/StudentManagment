@@ -75,8 +75,6 @@ This is a secure and scalable **Student Management System** REST API built using
 | `/students/{id}` | PUT    | USER, ADMIN | Update student                  |
 | `/students/{id}` | DELETE | USER, ADMIN | Delete student                  |
 
-> \* By default `POST /students` is public. You can restrict it to authenticated users if required.
-
 ---
 
 ## 📁 Project Structure
